@@ -26,8 +26,8 @@
     /**
      * Register the Fancy Slider block
      */
-    registerBlockType('pixeld/fancy-slider', {
-        title: __('Pixeld Fancy Slider', 'fancy-slider-block'),
+    registerBlockType('wpfancyslider/fancy-slider', {
+        title: __('Fancy Slider', 'fancy-slider-block'),
         icon: 'slides',
         category: 'widgets',
 
@@ -421,13 +421,13 @@
                         attributes.slides.length > 0 
                             ? wp.element.createElement(
                                 'div',
-                                { className: 'editor-pixeld-fancy-slider-fullscreen' },
+                                { className: 'editor-fancy-slider-fullscreen' },
                                 [
                                     // Heading section
                                     attributes.heading && wp.element.createElement(
                                         'div',
                                         { 
-                                            className: 'editor-pixeld-fancy-slider-heading-container',
+                                            className: 'editor-fancy-slider-heading-container',
                                             style: {
                                                 backgroundImage: `linear-gradient(to right, ${attributes.headingColor || '#f0f2f2'} 40%, transparent 40%)`
                                             }
@@ -439,14 +439,14 @@
                                                 wp.element.createElement(
                                                     'div',
                                                     { 
-                                                        className: 'editor-pixeld-fancy-slider-heading',
+                                                        className: 'editor-fancy-slider-heading',
                                                         style: {
                                                             backgroundColor: attributes.headingColor || '#f0f2f2'
                                                         }
                                                     },
                                                     wp.element.createElement('h2', null, attributes.heading)
                                                 ),
-                                                wp.element.createElement('div', { className: 'editor-filler' })
+                                                //wp.element.createElement('div', { className: 'editor-filler' })
                                             ]
                                         )
                                     ),
@@ -454,7 +454,7 @@
                                     // Background image with multiple slides preview
                                     wp.element.createElement(
                                         'div',
-                                        { className: 'editor-pixeld-fancy-slider-bg-container' },
+                                        { className: 'editor-fancy-slider-bg-container' },
                                         [
                                             // Show current active slide background
                                             (attributes.slides.length > 0 && 
@@ -463,7 +463,7 @@
                                              attributes.slides[activeSlide].imageUrl) && wp.element.createElement(
                                                 'div',
                                                 { 
-                                                    className: 'editor-pixeld-fancy-slider-bg active',
+                                                    className: 'editor-fancy-slider-bg active',
                                                     style: { 
                                                         backgroundImage: `url(${attributes.slides[activeSlide].imageUrl})`,
                                                         backgroundSize: 'cover',
@@ -473,7 +473,7 @@
                                             ),
                                             
                                             // Background overlay
-                                            wp.element.createElement('div', { className: 'editor-pixeld-fancy-slider-bg-overlay' }),
+                                            wp.element.createElement('div', { className: 'editor-fancy-slider-bg-overlay' }),
                                             
                                             // Slide indicator
                                             wp.element.createElement(
@@ -484,105 +484,109 @@
                                         ]
                                     ),
                                     
-                                    // Thumbnails navigation section
+                                    // Thumbnails navigation section - match frontend structure
                                     wp.element.createElement(
                                         'div',
-                                        { className: 'editor-pixeld-fancy-slider-section' },
+                                        { className: 'wp-block-uagb-container uagb-block-473ad4d1 alignfull uagb-is-root-container editor-fancy-slider-section' },
                                         wp.element.createElement(
                                             'div',
-                                            { className: 'editor-pixeld-fancy-slider-thumbnails-container' },
-                                            [
-                                                wp.element.createElement(
-                                                    'div',
-                                                    { className: 'editor-pixeld-fancy-slider-thumbnails' },
-                                                    attributes.slides.map(function(slide, index) {
-                                                        // Create a closure to capture the correct index
-                                                        var createThumbnailClickHandler = function(slideIndex) {
-                                                            return function(e) {
-                                                                e.preventDefault();
-                                                                e.stopPropagation();
-                                                                safeSetActiveSlide(slideIndex);
+                                            { className: 'uagb-container-inner-blocks-wrap inner-slider-container' },
+                                            wp.element.createElement(
+                                                'div',
+                                                { className: 'editor-fancy-slider-thumbnails-container' },
+                                                [
+                                                    wp.element.createElement(
+                                                        'div',
+                                                        { className: 'editor-fancy-slider-thumbnails' },
+                                                        attributes.slides.map(function(slide, index) {
+                                                            // Create a closure to capture the correct index
+                                                            var createThumbnailClickHandler = function(slideIndex) {
+                                                                return function(e) {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    safeSetActiveSlide(slideIndex);
+                                                                };
                                                             };
-                                                        };
-                                                        
-                                                        return wp.element.createElement(
-                                                            'div',
-                                                            {
-                                                                key: 'thumbnail-' + index,
-                                                                className: 'editor-pixeld-fancy-slider-thumbnail ' + (activeSlide === index ? 'active' : ''),
-                                                                onClick: createThumbnailClickHandler(index),
-                                                                style: {
-                                                                    cursor: 'pointer',
-                                                                    transition: 'all 0.3s ease'
-                                                                }
-                                                            },
-                                                            [
-                                                                slide.title && wp.element.createElement(
-                                                                    'div',
-                                                                    { className: 'editor-thumbnail-title' },
-                                                                    [
-                                                                        wp.element.createElement(
-                                                                            'span',
-                                                                            { className: 'editor-thumbnail-title-text' },
-                                                                            slide.title
-                                                                        ),
-                                                                        slide.link && wp.element.createElement(
-                                                                            'span',
-                                                                            { className: 'editor-thumbnail-title-arrow' },
-                                                                            '→'
-                                                                        )
-                                                                    ]
-                                                                ),
-                                                                slide.description && wp.element.createElement(
-                                                                    'div',
-                                                                    { className: 'editor-pixeld-fancy-slider-description' },
-                                                                    slide.description.length > 80 
-                                                                        ? slide.description.substring(0, 80) + '...' 
-                                                                        : slide.description
-                                                                )
-                                                            ]
-                                                        );
-                                                    })
-                                                ),
-                                                
-                                                // Navigation arrows for thumbnails
-                                                attributes.arrows && attributes.slides.length > 4 && [
-                                                    wp.element.createElement(
-                                                        'div',
-                                                        { 
-                                                            key: 'thumb-prev',
-                                                            className: 'editor-thumbnail-carousel-arrow editor-thumbnail-prev'
-                                                        },
-                                                        wp.element.createElement(
-                                                            'svg',
-                                                            { 
-                                                                xmlns: 'http://www.w3.org/2000/svg', 
-                                                                viewBox: '0 0 24 24', 
-                                                                width: '24', 
-                                                                height: '24' 
-                                                            },
-                                                            wp.element.createElement('path', { d: 'M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z' })
-                                                        )
+                                                            
+                                                            return wp.element.createElement(
+                                                                'div',
+                                                                {
+                                                                    key: 'thumbnail-' + index,
+                                                                    className: 'editor-fancy-slider-thumbnail ' + (activeSlide === index ? 'active' : ''),
+                                                                    onClick: createThumbnailClickHandler(index),
+                                                                    style: {
+                                                                        cursor: 'pointer',
+                                                                        transition: 'all 0.3s ease'
+                                                                    }
+                                                                },
+                                                                [
+                                                                    slide.title && wp.element.createElement(
+                                                                        'div',
+                                                                        { className: 'editor-thumbnail-title' },
+                                                                        [
+                                                                            wp.element.createElement(
+                                                                                'span',
+                                                                                { className: 'editor-thumbnail-title-text' },
+                                                                                slide.title
+                                                                            ),
+                                                                            slide.link && wp.element.createElement(
+                                                                                'span',
+                                                                                { className: 'editor-thumbnail-title-arrow' },
+                                                                                '→'
+                                                                            )
+                                                                        ]
+                                                                    ),
+                                                                    slide.description && wp.element.createElement(
+                                                                        'div',
+                                                                        { className: 'editor-fancy-slider-description' },
+                                                                        slide.description.length > 80 
+                                                                            ? slide.description.substring(0, 80) + '...' 
+                                                                            : slide.description
+                                                                    )
+                                                                ]
+                                                            );
+                                                        })
                                                     ),
-                                                    wp.element.createElement(
-                                                        'div',
-                                                        { 
-                                                            key: 'thumb-next',
-                                                            className: 'editor-thumbnail-carousel-arrow editor-thumbnail-next'
-                                                        },
+                                                    
+                                                    // Navigation arrows for thumbnails
+                                                    attributes.arrows && attributes.slides.length > 4 && [
                                                         wp.element.createElement(
-                                                            'svg',
+                                                            'div',
                                                             { 
-                                                                xmlns: 'http://www.w3.org/2000/svg', 
-                                                                viewBox: '0 0 24 24', 
-                                                                width: '24', 
-                                                                height: '24' 
+                                                                key: 'thumb-prev',
+                                                                className: 'editor-thumbnail-carousel-arrow editor-thumbnail-prev'
                                                             },
-                                                            wp.element.createElement('path', { d: 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z' })
+                                                            wp.element.createElement(
+                                                                'svg',
+                                                                { 
+                                                                    xmlns: 'http://www.w3.org/2000/svg', 
+                                                                    viewBox: '0 0 24 24', 
+                                                                    width: '24', 
+                                                                    height: '24' 
+                                                                },
+                                                                wp.element.createElement('path', { d: 'M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z' })
+                                                            )
+                                                        ),
+                                                        wp.element.createElement(
+                                                            'div',
+                                                            { 
+                                                                key: 'thumb-next',
+                                                                className: 'editor-thumbnail-carousel-arrow editor-thumbnail-next'
+                                                            },
+                                                            wp.element.createElement(
+                                                                'svg',
+                                                                { 
+                                                                    xmlns: 'http://www.w3.org/2000/svg', 
+                                                                    viewBox: '0 0 24 24', 
+                                                                    width: '24', 
+                                                                    height: '24' 
+                                                                },
+                                                                wp.element.createElement('path', { d: 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z' })
+                                                            )
                                                         )
-                                                    )
+                                                    ]
                                                 ]
-                                            ]
+                                            )
                                         )
                                     ),
                                     
@@ -592,7 +596,7 @@
                                             'div',
                                             { 
                                                 key: 'main-prev',
-                                                className: 'editor-pixeld-fancy-slider-arrow editor-pixeld-fancy-slider-prev',
+                                                className: 'editor-fancy-slider-arrow editor-fancy-slider-prev',
                                                 onClick: function(e) {
                                                     e.preventDefault();
                                                     e.stopPropagation();
@@ -618,7 +622,7 @@
                                             'div',
                                             { 
                                                 key: 'main-next',
-                                                className: 'editor-pixeld-fancy-slider-arrow editor-pixeld-fancy-slider-next',
+                                                className: 'editor-fancy-slider-arrow editor-fancy-slider-next',
                                                 onClick: function(e) {
                                                     e.preventDefault();
                                                     e.stopPropagation();
@@ -645,7 +649,7 @@
                             )
                             : wp.element.createElement(
                                 'div',
-                                { className: 'pixeld-fancy-slider-empty-preview' },
+                                { className: 'fancy-slider-empty-preview' },
                                 [
                                     wp.element.createElement(
                                         'div',
@@ -655,7 +659,7 @@
                                     wp.element.createElement(
                                         'h3',
                                         null,
-                                        __('Pixeld Fancy Slider', 'fancy-slider-block')
+                                        __('Fancy Slider', 'fancy-slider-block')
                                     ),
                                     wp.element.createElement(
                                         'p',

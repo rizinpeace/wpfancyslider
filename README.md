@@ -1,78 +1,160 @@
-# Pixeld Fancy Slider Block Plugin
+# Fancy Slider Block Plugin
 
-A WordPress block plugin that provides a fancy slider with images, titles, descriptions, and links. This plugin is designed to work alongside child theme implementations without conflicts.
+A WordPress block plugin that creates a sophisticated fullscreen slider with background images, thumbnail navigation, and customizable content. This plugin provides a modern, responsive slider experience with both editor and frontend functionality.
 
 ## Features
 
-- **Conflict-Free Design**: Automatically detects and defers to child theme fancy slider blocks
-- **Unique Namespace**: Uses `pixeld/fancy-slider` block name to avoid conflicts
-- **Responsive Design**: Mobile-friendly slider with touch support
-- **Customizable**: Configurable autoplay, arrows, dots, and slide count
-- **Accessible**: Built with accessibility best practices
+- **Fullscreen Background Slider**: Creates immersive fullscreen slides with background images
+- **Thumbnail Navigation**: Interactive thumbnail carousel with pagination dots
+- **Rich Content Support**: Each slide can have title, description, and custom links
+- **Responsive Design**: Mobile-friendly with touch support and adaptive layouts
+- **Customizable Settings**: Configurable autoplay, navigation arrows, dots, and slide count
+- **Editor Preview**: Real-time preview in the WordPress block editor
+- **Accessibility**: Built with ARIA attributes and keyboard navigation support
+- **Conflict-Free**: Uses unique namespace to avoid conflicts with other plugins
+
+## Project Structure
+
+```
+wpfancyslider/
+├── fancy-slider-block.php          # Main plugin file with registration
+├── blocks/
+│   ├── block.json                  # Block configuration and attributes
+│   ├── index.js                    # Block editor JavaScript (686 lines)
+│   ├── render.php                  # Frontend rendering logic (411 lines)
+│   ├── script.js                   # Frontend JavaScript functionality
+│   └── style.css                   # Complete styling (1529 lines)
+├── languages/
+│   └── fancy-slider-block.pot      # Translation template
+└── README.md                       # This file
+```
 
 ## Installation
 
-1. Upload the plugin folder to `/wp-content/plugins/`
+1. Upload the `wpfancyslider` folder to `/wp-content/plugins/`
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. The block will be available in the block editor under "Widgets"
+3. The "Fancy Slider" block will be available in the block editor under "Widgets"
 
-## Conflict Resolution
+## Block Configuration
 
-This plugin includes intelligent conflict detection:
-
-- **Child Theme Detection**: Automatically checks if a child theme has registered a `spectra-one-child/fancy-slider` block
-- **Graceful Deactivation**: If a conflict is detected, the plugin version is disabled and an admin notice is shown
-- **No Interference**: The plugin will not interfere with existing child theme implementations
-
-## Block Details
-
-- **Block Name**: `pixeld/fancy-slider`
-- **Title**: "Pixeld Fancy Slider"
+### Block Details
+- **Block Name**: `fancy-slider`
+- **Title**: "Fancy Slider"
 - **Category**: Widgets
 - **Text Domain**: `fancy-slider-block`
+- **Supports**: Wide and full alignment
+
+### Attributes
+The block supports the following configurable attributes:
+
+- **heading** (string): Main heading text
+- **headingColor** (string): Heading background color (default: #f0f2f2)
+- **slides** (array): Array of slide objects with:
+  - `title`: Slide title
+  - `description`: Slide description
+  - `imageUrl`: Background image URL
+  - `link`: Custom link URL
+  - `linkText`: Link text (default: "Learn More")
+- **slidesToShow** (number): Number of thumbnails to display (default: 3)
+- **autoplay** (boolean): Enable autoplay (default: true)
+- **autoplaySpeed** (number): Autoplay interval in milliseconds (default: 10000)
+- **arrows** (boolean): Show navigation arrows (default: true)
+- **dots** (boolean): Show pagination dots (default: true)
+
+## Technical Implementation
+
+### Frontend Rendering (`render.php`)
+- Generates unique block IDs for multiple instances
+- Creates fullscreen background container with overlay
+- Implements thumbnail carousel with pagination
+- Injects JavaScript initialization functions
+- Handles responsive design and accessibility
+
+### Editor Interface (`index.js`)
+- Comprehensive slide management system
+- Visual slide tabs for easy navigation
+- Rich media upload integration
+- Real-time preview with background images
+- Slide reordering and deletion capabilities
+
+### Styling (`style.css`)
+- Complete responsive design system
+- Editor-specific styles for preview
+- Frontend styles with hover effects
+- Mobile-first approach with breakpoints
+- Custom scrollbar styling for thumbnails
+
+### JavaScript Functionality (`script.js`)
+- Keyboard navigation support
+- Accessibility attribute management
+- Event handling for multiple slider instances
 
 ## CSS Classes
 
-All CSS classes are prefixed with `pixeld-fancy-slider-` to avoid styling conflicts:
+All CSS classes are prefixed with `fancy-slider-` to avoid styling conflicts:
 
-- `.pixeld-fancy-slider-fullscreen`
-- `.pixeld-fancy-slider-thumbnail`
-- `.pixeld-fancy-slider-arrow`
-- And many more...
+### Main Container
+- `.fancy-slider-fullscreen` - Main slider container
+- `.fancy-slider-bg-container` - Background image container
+- `.fancy-slider-bg` - Individual background slides
+- `.fancy-slider-bg-overlay` - Background overlay
+
+### Content Elements
+- `.fancy-slider-heading-container` - Heading section
+- `.fancy-slider-content` - Slide content
+- `.fancy-slider-title` - Slide titles
+- `.fancy-slider-description` - Slide descriptions
+
+### Navigation
+- `.fancy-slider-thumbnails-container` - Thumbnail navigation
+- `.fancy-slider-thumbnail` - Individual thumbnails
+- `.fancy-slider-arrow` - Navigation arrows
+- `.thumbnail-carousel-dots` - Pagination dots
 
 ## JavaScript Functions
 
-All JavaScript functions are prefixed with `pixeld` to avoid conflicts:
+All JavaScript functions are now generic (no prefix):
 
-- `pixeldInitFullscreenSlider()`
-- `pixeldInitThumbnailCarousel()`
-- `pixeld_render_fancy_slider_block()`
+- `initFullscreenSlider(sliderId, options)` - Initialize main slider
+- `initThumbnailCarousel(sliderId)` - Initialize thumbnail navigation
+- `render_fancy_slider_block(attributes, content)` - PHP render callback
 
-## Admin Notices
+## Responsive Breakpoints
 
-If the plugin detects a conflicting child theme block, it will display an informational notice:
+The plugin includes comprehensive responsive design:
 
-> **Pixeld Fancy Slider Block:** The child theme already has a Fancy Slider block registered. The plugin version has been disabled to prevent conflicts.
+- **Desktop**: 1200px+ - Full layout with all features
+- **Tablet**: 992px-1199px - Adjusted spacing and typography
+- **Mobile Large**: 768px-991px - Simplified layout
+- **Mobile**: 576px-767px - Stacked layout
+- **Mobile Small**: <576px - Minimal layout
+
+## Accessibility Features
+
+- ARIA attributes for screen readers
+- Keyboard navigation support (arrow keys)
+- Focus management
+- Semantic HTML structure
+- High contrast support
 
 ## Development
 
-The plugin follows WordPress coding standards and includes:
+### Requirements
+- WordPress 5.0+
+- PHP 7.4+
+- Modern browser support
 
+### Coding Standards
+- WordPress coding standards compliance
 - Proper sanitization and escaping
 - Unique function and class names
-- Conflict detection and resolution
-- Responsive design
-- Accessibility features
+- Comprehensive error handling
 
-## Version
-
-1.0.4 - Fixed frontend navigation functionality
-
-## Changelog
+## Version History
 
 ### 1.0.4
-- Fixed frontend navigation arrows and dots not working
-- Uncommented main slider navigation arrows in render output
+- Fixed frontend navigation functionality
+- Uncommented main slider navigation arrows
 - Fixed undefined `$link` variable in thumbnail loop
 - Added proper null checks for navigation elements
 - Enhanced debugging with comprehensive console logging
@@ -84,30 +166,25 @@ The plugin follows WordPress coding standards and includes:
 - Implemented safe slide navigation with bounds checking
 - Added useEffect to manage activeSlide state consistency
 - Enhanced error handling for out-of-bounds slide access
-- Added debugging console logs for troubleshooting
 
 ### 1.0.2
 - Enhanced backend editor preview with beautiful visual design
 - Added proper heading display in editor preview
 - Improved thumbnail layout and styling
 - Added slide indicator showing current slide position
-- Enhanced empty state with better visual design and call-to-action
-- Added responsive design for editor preview
-- Improved navigation arrows with better styling
-- Added hover effects and smooth transitions
+- Enhanced empty state with better visual design
 
 ### 1.0.1
 - Fixed text domain loading to prevent "called incorrectly" notices
 - Added proper `plugins_loaded` hook for text domain initialization
 - Created languages directory and POT template file
-- Improved conflict detection logic
 
 ### 1.0.0
-- Initial release with conflict-free implementation
+- Initial release with fullscreen slider functionality
 
 ## Author
 
-Riz - [Pixeld](https://www.pixeld.com.au)
+Riz
 
 ## License
 

@@ -4,7 +4,7 @@
  */
 
 // Only handle frontend rendering here - registration is in functions.php
-function pixeld_render_fancy_slider_block($attributes, $content) {
+function render_fancy_slider_block($attributes, $content) {
     $slides = $attributes['slides'] ?? [];
     $slides_to_show = $attributes['slidesToShow'] ?? 3;
     $autoplay = $attributes['autoplay'] ?? true;
@@ -15,40 +15,40 @@ function pixeld_render_fancy_slider_block($attributes, $content) {
     $heading = $attributes['heading'] ?? '';
     $heading_color = $attributes['headingColor'] ?? '#f0f2f2';
 
-    $block_id = 'pixeld-fancy-slider-' . uniqid();
+    $block_id = 'fancy-slider-' . uniqid();
 
     // If no slides, return nothing
     if (empty($slides)) {
-        return '<div class="pixeld-fancy-slider-empty">No slides added yet.</div>';
+        return '<div class="fancy-slider-empty">No slides added yet.</div>';
     }
     
     ob_start(); ?>
-    <div class="pixeld-fancy-slider-fullscreen" id="<?php echo esc_attr($block_id); ?>">
+    <div class="fancy-slider-fullscreen" id="<?php echo esc_attr($block_id); ?>">
         <?php if ($heading) : ?>
-            <div class="pixeld-fancy-slider-heading-container">
+            <div class="fancy-slider-heading-container">
                 <div class="container">
-                    <div class="pixeld-fancy-slider-heading"><h2><?php echo wp_kses_post($heading); ?></h2></div>
+                    <div class="fancy-slider-heading"><h2><?php echo wp_kses_post($heading); ?></h2></div>
                     <div class="filler"></div>
                 </div>
             </div>
         <?php endif; ?>
-        <div class="pixeld-fancy-slider-bg-container">
+        <div class="fancy-slider-bg-container">
             <?php foreach ($slides as $index => $slide) : 
                 $image_url = $slide['imageUrl'] ?? '';
                 $active_class = ($index === 0) ? 'active' : '';
             ?>
-                <div class="pixeld-fancy-slider-bg <?php echo esc_attr($active_class); ?>" data-slide="<?php echo esc_attr($index); ?>" style="background-image: url('<?php echo esc_url($image_url); ?>')"></div>
+                <div class="fancy-slider-bg <?php echo esc_attr($active_class); ?>" data-slide="<?php echo esc_attr($index); ?>" style="background-image: url('<?php echo esc_url($image_url); ?>')"></div>
             <?php endforeach; ?>
-            <div class="pixeld-fancy-slider-bg-overlay"></div>
+            <div class="fancy-slider-bg-overlay"></div>
         </div>
         
 
         
         <!-- Bottom Navigation Thumbnails -->
-        <div class="wp-block-uagb-container uagb-block-473ad4d1 alignfull uagb-is-root-container pixeld-fancy-slider-section">
+        <div class="wp-block-uagb-container uagb-block-473ad4d1 alignfull uagb-is-root-container fancy-slider-section">
             <div class="uagb-container-inner-blocks-wrap inner-slider-container">
-                <div class="pixeld-fancy-slider-thumbnails-container">
-                    <div class="pixeld-fancy-slider-thumbnails" id="<?php echo esc_attr($block_id); ?>-thumbnails">
+                <div class="fancy-slider-thumbnails-container">
+                    <div class="fancy-slider-thumbnails" id="<?php echo esc_attr($block_id); ?>-thumbnails">
                         <?php foreach ($slides as $index => $slide) : 
                             $image_url = $slide['imageUrl'] ?? '';
                             $title = $slide['title'] ?? '';
@@ -57,13 +57,13 @@ function pixeld_render_fancy_slider_block($attributes, $content) {
                             $link = $slide['link'] ?? '';
 
                         ?>
-                            <div class="pixeld-fancy-slider-thumbnail <?php echo esc_attr($active_class); ?>" data-slide="<?php echo esc_attr($index); ?>">
+                            <div class="fancy-slider-thumbnail <?php echo esc_attr($active_class); ?>" data-slide="<?php echo esc_attr($index); ?>">
                                 <?php if ($title) : ?>
                                     <div class="thumbnail-title"><span class="thumbnail-title-text"><?php echo wp_kses_post($title); ?></span> <span class="thumbnail-title-arrow"><?php if ($link) : ?><a href="<?php echo esc_url($link); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/images/slider-arrow.svg" alt="Arrow Right"></a><?php endif; ?></span></div>
                                 <?php endif; ?>
 
                                 <?php if ($description) : ?>
-                                    <div class="pixeld-fancy-slider-description"><?php echo wp_kses_post($description); ?></div>
+                                    <div class="fancy-slider-description"><?php echo wp_kses_post($description); ?></div>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
@@ -100,10 +100,10 @@ function pixeld_render_fancy_slider_block($attributes, $content) {
 
     <style>
         #<?php echo esc_attr($block_id); ?>{
-            .pixeld-fancy-slider-heading-container{
+            .fancy-slider-heading-container{
                 background-image: linear-gradient(to right, <?php echo esc_attr($heading_color); ?> 40%, transparent 40%);
 
-                .pixeld-fancy-slider-heading{                    
+                .fancy-slider-heading{                    
                     background-color:<?php echo esc_attr($heading_color); ?>;
 
                     &:after{
@@ -117,14 +117,14 @@ function pixeld_render_fancy_slider_block($attributes, $content) {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize slider
-            pixeldInitFullscreenSlider('<?php echo esc_attr($block_id); ?>', {
+            initFullscreenSlider('<?php echo esc_attr($block_id); ?>', {
                 autoplay: <?php echo $autoplay ? 'true' : 'false'; ?>,
                 autoplaySpeed: <?php echo (int)$autoplay_speed; ?>,
                 arrows: <?php echo $arrows ? 'true' : 'false'; ?>
             });
             
             // Initialize thumbnail carousel
-            pixeldInitThumbnailCarousel('<?php echo esc_attr($block_id); ?>');
+            initThumbnailCarousel('<?php echo esc_attr($block_id); ?>');
         });
     </script>
     <?php
@@ -132,11 +132,11 @@ function pixeld_render_fancy_slider_block($attributes, $content) {
 }
 
 // Register initialization function
-function pixeld_fancy_slider_init_scripts() {
+function fancy_slider_init_scripts() {
     ?>
     <script>
         // Initialize fullscreen slider
-        function pixeldInitFullscreenSlider(sliderId, options) {
+        function initFullscreenSlider(sliderId, options) {
             console.log('Initializing slider:', sliderId, options);
             
             const slider = document.getElementById(sliderId);
@@ -145,9 +145,9 @@ function pixeld_fancy_slider_init_scripts() {
                 return;
             }
             
-            const backgrounds = slider.querySelectorAll('.pixeld-fancy-slider-bg');
-            const contents = slider.querySelectorAll('.pixeld-fancy-slider-content');
-            const thumbnails = slider.querySelectorAll('.pixeld-fancy-slider-thumbnail');
+            const backgrounds = slider.querySelectorAll('.fancy-slider-bg');
+            const contents = slider.querySelectorAll('.fancy-slider-content');
+            const thumbnails = slider.querySelectorAll('.fancy-slider-thumbnail');
             const totalSlides = backgrounds.length;
             
             console.log('Found elements:', {
@@ -282,7 +282,7 @@ function pixeld_fancy_slider_init_scripts() {
         }
 
         // Initialize thumbnail carousel
-        function pixeldInitThumbnailCarousel(sliderId) {
+        function initThumbnailCarousel(sliderId) {
             console.log('Initializing thumbnail carousel:', sliderId);
             
             const container = document.getElementById(`${sliderId}-thumbnails`);
@@ -295,7 +295,7 @@ function pixeld_fancy_slider_init_scripts() {
             const nextButton = document.getElementById(`${sliderId}-thumbnail-next`);
             const dotsContainer = document.getElementById(`${sliderId}-thumbnail-dots`);
             const dots = dotsContainer ? dotsContainer.querySelectorAll('.thumbnail-dot') : [];
-            const thumbnails = container.querySelectorAll('.pixeld-fancy-slider-thumbnail');
+            const thumbnails = container.querySelectorAll('.fancy-slider-thumbnail');
             
             const totalThumbnails = thumbnails.length;
             const itemsPerPage = 4; // Show 4 items per page
@@ -407,4 +407,4 @@ function pixeld_fancy_slider_init_scripts() {
     </script>
     <?php
 }
-add_action('wp_footer', 'pixeld_fancy_slider_init_scripts'); 
+add_action('wp_footer', 'fancy_slider_init_scripts'); 
