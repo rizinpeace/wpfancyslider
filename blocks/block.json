@@ -1,0 +1,52 @@
+{
+    "apiVersion": 2,
+    "name": "pixeld/fancy-slider",
+    "title": "Pixeld Fancy Slider",
+    "category": "widgets",
+    "icon": "slides",
+    "description": "Create a slider with cards that display image, title, description, and link.",
+    "keywords": ["slider", "carousel", "cards", "fancy", "pixeld"],
+    "version": "1.0.0",
+    "textdomain": "fancy-slider-block",
+    "editorScript": "file:./index.js",
+    "style": "file:./style.css",
+    "viewScript": "file:./script.js",
+    "supports": {
+        "html": false,
+        "align": ["wide", "full"]
+    },
+    "attributes": {
+        "heading": {
+            "type": "string",
+            "default": ""
+        },
+        "headingColor": {
+            "type": "string",
+            "default": "#f0f2f2"
+        },
+        "slides": {
+            "type": "array",
+            "default": []
+        },
+        "slidesToShow": {
+            "type": "number",
+            "default": 3
+        },
+        "autoplay": {
+            "type": "boolean",
+            "default": true
+        },
+        "autoplaySpeed": {
+            "type": "number",
+            "default": 10000
+        },
+        "arrows": {
+            "type": "boolean",
+            "default": true
+        },
+        "dots": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+} 
